@@ -33,7 +33,7 @@ public class Human implements Participant {
             System.out.println("Человек " + name + " не пробежал и сошел с дистанции");
             return;
         }
-        System.out.println("Человек " + name + " успешно пробежал дистанцию");
+        System.out.println("Человек " + name + " успешно пробежал дистанцию " + distance + " метров");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Human implements Participant {
             System.out.println("Человек " + name + " не перепрыгнул и сошел с дистанции");
             return;
         }
-        System.out.println("Человек " + name + " успешно перепрыгнул");
+        System.out.println("Человек " + name + " успешно перепрыгнул " + height + "метра(ов)");
     }
 
     @Override
@@ -55,11 +55,11 @@ public class Human implements Participant {
             System.out.println("Человек " + name + " не проплыл и сошел с дистанции");
             return;
         }
-        System.out.println("Человек " + name + " успешно проплыл дистанцию");
+        System.out.println("Человек " + name + " успешно проплыл дистанцию " + distance + " метров");
     }
 
     public void getInfo() {
-        System.out.println(String.format("Человек, имя: %s, возраст: %s", name, age));
+        System.out.println(String.format("Человек, имя: %s, возраст: %s года(лет)", name, age));
     }
 
 }

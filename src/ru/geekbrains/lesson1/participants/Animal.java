@@ -42,7 +42,7 @@ public abstract class Animal implements Participant {
             System.out.println(type + " " + name + " не пробежал и сошел с дистанции");
             return;
         }
-        System.out.println(type + " " + name + " успешно пробежал дистанцию");
+        System.out.println(type + " " + name + " успешно пробежал дистанцию " + distance + " метров");
     }
 
     @Override
@@ -54,7 +54,7 @@ public abstract class Animal implements Participant {
             System.out.println(type + " " + name + " не перепрыгнул и сошел с дистанции");
             return;
         }
-        System.out.println(type + " " + name + " успешно перепрыгнул");
+        System.out.println(type + " " + name + " успешно перепрыгнул " + height + " метра(ов)");
     }
 
     @Override
@@ -71,10 +71,10 @@ public abstract class Animal implements Participant {
             System.out.println(type + " " + name + " не проплыл и сошел с дистанции");
             return;
         }
-        System.out.println(type + " " + name + " успешно проплыл дистанцию");
+        System.out.println(type + " " + name + " успешно проплыл дистанцию " + distance + " метров");
     }
 
     public void getInfo() {
-        System.out.println(String.format("%s, имя: %s, возраст: %s, цвет: %s", type, name, age, color.getName()));
+        System.out.println(String.format("%s, имя: %s, возраст: %s года(лет), цвет: %s", type, name, age, color.getName()));
     }
 }

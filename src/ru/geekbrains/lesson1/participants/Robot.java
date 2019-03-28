@@ -35,7 +35,7 @@ public class Robot implements Participant{
             System.out.println("Робот " + model + " не пробежал и сошел с дистанции");
             return;
         }
-        System.out.println("Робот " + model + " успешно пробежал дистанцию");
+        System.out.println("Робот " + model + " успешно пробежал дистанцию " + distance + " метров");
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Robot implements Participant{
             System.out.println("Робот " + model + " не перепрыгнул и сошел с дистанции");
             return;
         }
-        System.out.println("Робот " + model + " успешно перепрыгнул");
+        System.out.println("Робот " + model + " успешно перепрыгнул " + height + " метра(ов)");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class Robot implements Participant{
             System.out.println("Робот " + model + " не проплыл и сошел с дистанции");
             return;
         }
-        System.out.println("Робот " + model + " успешно проплыл дистанцию");
+        System.out.println("Робот " + model + " успешно проплыл дистанцию " + distance + " метров");
     }
 
     public void getInfo() {
