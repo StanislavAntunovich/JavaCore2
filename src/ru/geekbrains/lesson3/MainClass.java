@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MainClass {
 
@@ -19,9 +18,11 @@ public class MainClass {
         }
 
         System.out.println("Слова из которых состоит массив (без дубликатов): " + words.keySet());
-        System.out.println("Уникальные слова: " + words.keySet().stream()
-                .filter(v -> words.get(v) == 1)
-                .collect(Collectors.toList()));
+        System.out.print("Уникальные слова: ");
+        for (String w : words.keySet()) {
+            if (words.get(w) == 1) System.out.print(w + " ");
+        }
+        System.out.println();
 
         for (String w : words.keySet()) {
             System.out.printf("Слово %s встречается %d раз%n", w, words.get(w));
