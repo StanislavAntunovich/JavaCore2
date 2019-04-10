@@ -26,8 +26,10 @@ public class Controller {
 
     private void sendMessage(ActionEvent actionEvent) {
         String message = txtMessageInput.getText();
-        areaMessages.appendText(message + "\n");
-        txtMessageInput.clear();
-        txtMessageInput.requestFocus();
+        if (!message.equals("")) {
+            areaMessages.appendText(message + "\n");
+            txtMessageInput.clear();
+            txtMessageInput.requestFocus();
+        }
     }
 }
