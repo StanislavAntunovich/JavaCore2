@@ -10,7 +10,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("fxml/main_window.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("resources/fxml/main_window.fxml"));
         primaryStage.setTitle("GeekChat");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(380.0);
