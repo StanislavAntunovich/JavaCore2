@@ -15,9 +15,7 @@ public class MainClass {
     private static void fillArray() {
         float[] arr = makeArray();
         long start = System.currentTimeMillis();
-        for (int i = 0; i < SIZE; i++) {
-            arr[i] = (float) (arr[i] * Math.sin(0.2f + i / 5f) * Math.cos(0.2f + i / 5f) * Math.cos(0.4f + i / 2f));
-        }
+        calcAndFill(arr, SIZE, false);
         long finish = System.currentTimeMillis();
 
         System.out.println("Время выполнения в одном потоке: " + (finish - start));
@@ -33,20 +31,11 @@ public class MainClass {
         System.arraycopy(arr, HALF_SIZE, a2, 0, HALF_SIZE);
 
         Thread t1 = new Thread(() -> {
-            for (int i = 0; i < HALF_SIZE; i++) {
-                a1[i] = (float) (a1[i]
-                        * Math.sin(0.2f + i / 5f)
-                        * Math.cos(0.2f + i / 5f)
-                        * Math.cos(0.4f + i / 2f));
-            }
+            calcAndFill(a1, HALF_SIZE, false);
         });
 
         Thread t2 = new Thread(() -> {
-            for (int i = 0; i < HALF_SIZE; i++) {
-                a2[i] = (float) (a2[i]
-                        * Math.sin(0.2f + (HALF_SIZE + i) / 5f)
-                        * Math.cos(0.2f + (HALF_SIZE + i) / 5f)
-                        * Math.cos(0.4f + (HALF_SIZE + i) / 2f));}
+            calcAndFill(a2, HALF_SIZE, true);
         });
 
         t1.start();
@@ -64,6 +53,21 @@ public class MainClass {
         long end = System.currentTimeMillis();
 
         System.out.println("Время выполнения в двух потоках: " + (end - start));
+    }
+
+    /**
+     * @param array        array that will be filled with values counted by formula;
+     * @param size         size of to be filled array;
+     * @param isSecondPart if array is second part of separated to be filled array, i in formula incrementing by size of array's part
+     */
+    private static void calcAndFill(float[] array, int size, boolean isSecondPart) {
+        int incrementer = isSecondPart ? size : 0;
+        for (int i = 0; i < size; i++) {
+            array[i] = (float) (array[i]
+                    * Math.sin(0.2f + (incrementer + i) / 5f)
+                    * Math.cos(0.2f + (incrementer + i) / 5f)
+                    * Math.cos(0.4f + (incrementer + i) / 2f));
+        }
     }
 
     public static void main(String[] args) {
