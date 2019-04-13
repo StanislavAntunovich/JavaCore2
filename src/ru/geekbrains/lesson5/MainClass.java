@@ -16,7 +16,7 @@ public class MainClass {
         float[] arr = makeArray();
         long start = System.currentTimeMillis();
         for (int i = 0; i < SIZE; i++) {
-            arr[i] = (float) (arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
+            arr[i] = (float) (arr[i] * Math.sin(0.2f + i / 5f) * Math.cos(0.2f + i / 5f) * Math.cos(0.4f + i / 2f));
         }
         long finish = System.currentTimeMillis();
 
@@ -35,18 +35,18 @@ public class MainClass {
         Thread t1 = new Thread(() -> {
             for (int i = 0; i < HALF_SIZE; i++) {
                 a1[i] = (float) (a1[i]
-                        * Math.sin(0.2f + i / 5)
-                        * Math.cos(0.2f + i / 5)
-                        * Math.cos(0.4f + i / 2));
+                        * Math.sin(0.2f + i / 5f)
+                        * Math.cos(0.2f + i / 5f)
+                        * Math.cos(0.4f + i / 2f));
             }
         });
 
         Thread t2 = new Thread(() -> {
             for (int i = 0; i < HALF_SIZE; i++) {
                 a2[i] = (float) (a2[i]
-                        * Math.sin(0.2f + (HALF_SIZE + i) / 5)
-                        * Math.cos(0.2f + (HALF_SIZE + i) / 5)
-                        * Math.cos(0.4f + (HALF_SIZE + i) / 2));}
+                        * Math.sin(0.2f + (HALF_SIZE + i) / 5f)
+                        * Math.cos(0.2f + (HALF_SIZE + i) / 5f)
+                        * Math.cos(0.4f + (HALF_SIZE + i) / 2f));}
         });
 
         t1.start();
@@ -69,7 +69,6 @@ public class MainClass {
     public static void main(String[] args) {
         fillArray();
         fillArrayWithThreads();
-
     }
 
 }
