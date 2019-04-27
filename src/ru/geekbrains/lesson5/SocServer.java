@@ -60,7 +60,7 @@ public class SocServer {
 
             ServerSocket serverSocket = new ServerSocket(PORT);
 
-            System.out.println("Server waiting for connection");
+            System.out.println("server waiting for connection");
 
                 Socket socket = serverSocket.accept();
                 startReading(socket);
