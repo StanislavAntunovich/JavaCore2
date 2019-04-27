@@ -15,8 +15,6 @@ import ru.geekbrains.lesson4.client.network.Network;
 import java.io.IOException;
 import java.util.List;
 
-import static ru.geekbrains.lesson4.MessagesPatterns.INCOME_MESSAGE;
-
 
 public class Controller implements IncomeMessageHandler {
 
@@ -24,10 +22,8 @@ public class Controller implements IncomeMessageHandler {
     private Network network;
     private boolean isAuthorized;
 
-    private String sendTo = "all";
-
     @FXML
-    private TextArea areaMessages;
+    private ListView<Message> listMessages;
 
     @FXML
     private TextField txtMessageInput;
@@ -63,6 +59,8 @@ public class Controller implements IncomeMessageHandler {
 
     private Stage stage;
 
+    private ObservableList<Message> messages = FXCollections.observableArrayList();
+
 
     @FXML
     private void initialize() {
@@ -78,6 +76,11 @@ public class Controller implements IncomeMessageHandler {
         bttnCancel.setOnAction(this::cancelBttnClicked);
 
         setAuthorized(false);
+
+        listMessages.setCellFactory(messageListView -> new MessageCell());
+        listMessages.setItems(messages);
+
+
 
     }
 
@@ -132,11 +135,13 @@ public class Controller implements IncomeMessageHandler {
             stage = (Stage) mainLayout.getScene().getWindow();
             stage.setTitle(stage.getTitle() + " " + login);
 
+            txtMessageInput.requestFocus();
 
         } catch (IOException e) {
             showError("Network ERROR", "No network connection");
         }
         txtPassword.clear();
+
     }
 
     private void cancelBttnClicked(ActionEvent event) {
@@ -153,7 +158,7 @@ public class Controller implements IncomeMessageHandler {
     @Override
     public void handleMessage(String from, String message) {
         final String messageFrom = from.equals(network.getLogin()) ? "Вы" : from;
-        areaMessages.appendText(String.format(INCOME_MESSAGE, messageFrom, message));
+        Platform.runLater(() -> messages.add(new Message(messageFrom, message, false)));
     }
 
     @Override

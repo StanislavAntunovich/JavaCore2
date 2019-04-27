@@ -11,11 +11,10 @@
 
     <VBox fx:id="panelMessages" VBox.vgrow="ALWAYS">
 
-        <HBox>
+        <HBox maxWidth="Infinity" minWidth="300" maxHeight="Infinity" VBox.vgrow="ALWAYS">
 
-            <TextArea id="messages-area" fx:id="areaMessages" editable="false" VBox.vgrow="ALWAYS" wrapText="true"/>
-<!--            <ListView fx:id="listMessages" VBox.vgrow="ALWAYS"/>-->
-            <ListView fx:id="usersOnLine" minWidth="100" HBox.hgrow="ALWAYS"/>
+            <ListView fx:id="listMessages" HBox.hgrow="ALWAYS" minWidth="200" maxWidth="Infinity"/>
+            <ListView fx:id="usersOnLine" minWidth="100" HBox.hgrow="ALWAYS" maxWidth="300"/>
         </HBox>
             <HBox id="bottom-box"
                   spacing="5.0">

@@ -6,12 +6,14 @@ public class Message {
     private LocalDateTime created;
     private String user;
     private String messageText;
+    private boolean isPrivate;
 
     public Message() {
         created = LocalDateTime.now();
     }
 
-    public Message(String user, String messageText) {
+    public Message(String user, String messageText, boolean isPrivate) {
+        this.isPrivate = isPrivate;
         this.user = user;
         this.messageText = messageText;
         created = LocalDateTime.now();
@@ -39,5 +41,13 @@ public class Message {
 
     public void setMessageText(String messageText) {
         this.messageText = messageText;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
     }
 }
