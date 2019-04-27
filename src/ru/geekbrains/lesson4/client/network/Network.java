@@ -7,9 +7,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 
-import static ru.geekbrains.lesson4.MessagesPatterns.ADDRESSED_MESSAGE_PATTERN;
-import static ru.geekbrains.lesson4.MessagesPatterns.AUTH_MESSAGE;
+import static ru.geekbrains.lesson4.MessagesPatterns.*;
 
 public class Network {
 
@@ -40,8 +40,13 @@ public class Network {
             while (true) {
                 try {
                     String msg = in.readUTF();
-                    String[] splitedMsg = msg.split(">", 2);
-                    incomeMessageHandler.handleMessage(splitedMsg[0], splitedMsg[1]);
+                    System.out.println("income msg: " + msg);
+                    if (msg.startsWith("/"))
+                        handleServerCommand(msg);
+                    else {
+                        String[] splitedMsg = msg.split(">", 2);
+                        incomeMessageHandler.handleMessage(splitedMsg[0], splitedMsg[1]);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                     break;
@@ -49,6 +54,24 @@ public class Network {
             }
         });
 
+    }
+
+    private void handleServerCommand(String msg) {
+        String[] preparedMsg = msg.split(" ", 2);
+        String command = preparedMsg[0];
+        //TODO: поменять на switch
+        if (preparedMsg[0].equals(USERS_LIST_COMMAND)) {
+            incomeMessageHandler.setOnlineUsersList(Arrays.asList(preparedMsg[1].split(" ")));
+            return;
+        }
+        if (command.equals(USER_CAME_OFLINE_COMMAND)) {
+            incomeMessageHandler.removeOnlineUser(preparedMsg[1]);
+            return;
+        }
+        if (command.equals(USER_CAME_ONLINE_COMMAND)) {
+            incomeMessageHandler.addOnlineUser(preparedMsg[1]);
+            return;
+        }
     }
 
     public void authorize(String login, String password) throws IOException, AuthException {
@@ -70,11 +93,14 @@ public class Network {
         }
     }
 
-    public void sendMessage(String message) {
+    public void requestOnlineUsersList() throws IOException {
+        out.writeUTF(REQUEST_ONLINE_USERS);
+    }
+
+    public void sendMessage(String to, String message) {
         try {
-            if (message.startsWith("/w")) {
-                String[] messageSplited = message.split(" ", 3);
-                sendAddressedMessage(messageSplited[1], messageSplited[2]);
+            if (!to.equals("all")) {
+                sendAddressedMessage(to, message);
             } else {
                 out.writeUTF(message);
             }
@@ -85,6 +111,7 @@ public class Network {
     }
 
     public void sendAddressedMessage(String to, String message) throws IOException {
+        System.out.println("addressed msg: " + String.format(ADDRESSED_MESSAGE_PATTERN, to, message));
         out.writeUTF(String.format(ADDRESSED_MESSAGE_PATTERN, to, message));
     }
 

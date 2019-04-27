@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.geekbrains.lesson4.MessagesPatterns.USER_OFFLINE_PATTERN;
+import static ru.geekbrains.lesson4.MessagesPatterns.*;
 
 public class Server {
 
@@ -27,12 +27,13 @@ public class Server {
 
     private Map<String, ClientHandler> clientHandlers = Collections.synchronizedMap(new HashMap<>());
 
+    //TODO: refactor
     public void sendAddressedMessage(String from, String to, String message) {
         ClientHandler toCli = clientHandlers.getOrDefault(to, null);
         ClientHandler fromCli = clientHandlers.get(from);
         if (toCli != null) {
-            toCli.sendMessage(message);
-            fromCli.sendMessage(message);
+            toCli.sendMessage(String.format(MESSAGE_PATTERN,from, message));
+            fromCli.sendMessage(String.format(MESSAGE_PATTERN,from, message));
         } else {
             fromCli.sendMessage(String.format(USER_OFFLINE_PATTERN, to));
         }
@@ -44,11 +45,13 @@ public class Server {
     }
 
     public void subscribe(String login, ClientHandler clientHandler) {
+        userCameOnline(login);
         clientHandlers.put(login, clientHandler);
     }
 
     public void unSubscribe(String login) {
         clientHandlers.remove(login);
+        userCameOffline(login);
     }
 
     public void startServer(int port) {
@@ -93,6 +96,31 @@ public class Server {
         }
         return auth[1];
     }
+
+    public void sendUsersList(String userLogin) {
+        ClientHandler cl = clientHandlers.get(userLogin);
+        if (!clientHandlers.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (String login : clientHandlers.keySet()){
+                if (!login.equals(userLogin)) {
+                    sb.append(login);
+                    sb.append(" ");
+                }
+            }
+            System.out.println(sb);
+            cl.sendMessage(String.format(USERS_LIST_PATTERN, sb.toString().trim()));
+        }
+    }
+
+    private void userCameOnline(String userLogin) {
+        sendBroadcastMessage(String.format(USER_CAME_ONLINE_PATTERN, userLogin));
+    }
+
+    private void userCameOffline(String userLogin) {
+        sendBroadcastMessage(String.format(USER_CAME_OFLINE_PATTERN, userLogin));
+    }
+
+
 
 
 }

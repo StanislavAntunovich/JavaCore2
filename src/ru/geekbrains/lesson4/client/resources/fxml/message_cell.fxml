@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<fx:root type="javafx.scene.control.ListCell" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <graphic>
+        <VBox>
+            <HBox fx:id="messageCellTop">
+                <Label fx:id="labelTimeStamp"/>
+                <Label fx:id="labelUser"/>
+            </HBox>
+            <TextArea fx:id="txtMessage"/>
+        </VBox>
+    </graphic>
+</fx:root>
