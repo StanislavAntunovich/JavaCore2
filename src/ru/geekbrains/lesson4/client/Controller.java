@@ -85,7 +85,6 @@ public class Controller implements IncomeMessageHandler {
 
         String message = txtMessageInput.getText();
         String to = usersOnLine.getSelectionModel().getSelectedItem();
-        System.out.println("selected user " + to);
         network.sendMessage(to, message);
         txtMessageInput.clear();
         txtMessageInput.requestFocus();

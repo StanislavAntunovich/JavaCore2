@@ -107,7 +107,6 @@ public class Server {
                     sb.append(" ");
                 }
             }
-            System.out.println(sb);
             cl.sendMessage(String.format(USERS_LIST_PATTERN, sb.toString().trim()));
         }
     }

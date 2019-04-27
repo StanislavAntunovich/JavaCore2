@@ -40,7 +40,6 @@ public class Network {
             while (true) {
                 try {
                     String msg = in.readUTF();
-                    System.out.println("income msg: " + msg);
                     if (msg.startsWith("/"))
                         handleServerCommand(msg);
                     else {
@@ -111,7 +110,6 @@ public class Network {
     }
 
     public void sendAddressedMessage(String to, String message) throws IOException {
-        System.out.println("addressed msg: " + String.format(ADDRESSED_MESSAGE_PATTERN, to, message));
         out.writeUTF(String.format(ADDRESSED_MESSAGE_PATTERN, to, message));
     }
 
