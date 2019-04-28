@@ -1,27 +1,29 @@
 package ru.geekbrains.lesson4.client;
 
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import ru.geekbrains.lesson4.AuthException;
+import ru.geekbrains.lesson4.client.network.IncomeMessageHandler;
 import ru.geekbrains.lesson4.client.network.Network;
 
 import java.io.IOException;
+import java.util.List;
 
-import static ru.geekbrains.lesson4.MessagesPatterns.INCOME_MESSAGE;
 
-
-public class Controller {
+public class Controller implements IncomeMessageHandler {
 
     private Alert errorAlert;
-
     private Network network;
-
     private boolean isAuthorized;
 
     @FXML
-    private TextArea areaMessages;
+    private ListView<Message> listMessages;
 
     @FXML
     private TextField txtMessageInput;
@@ -47,10 +49,25 @@ public class Controller {
     @FXML
     private PasswordField txtPassword;
 
+    @FXML
+    private VBox mainLayout;
+
+    @FXML
+    private ListView<String> usersOnLine;
+
+    private ObservableList<String> users = FXCollections.observableArrayList("all");
+
+    private Stage stage;
+
+    private ObservableList<Message> messages = FXCollections.observableArrayList();
+
 
     @FXML
     private void initialize() {
         errorAlert = new Alert(Alert.AlertType.ERROR);
+
+        usersOnLine.setItems(users);
+        usersOnLine.getSelectionModel().select(0);
 
         bttnSendMessage.setOnAction(this::sendMessage);
         txtMessageInput.setOnAction(this::sendMessage);
@@ -59,20 +76,23 @@ public class Controller {
         bttnCancel.setOnAction(this::cancelBttnClicked);
 
         setAuthorized(false);
+
+        listMessages.setCellFactory(messageListView -> new MessageCell());
+        listMessages.setItems(messages);
+
+
+
     }
 
     private void sendMessage(ActionEvent actionEvent) {
 
         String message = txtMessageInput.getText();
-        network.sendMessage(message);
+        String to = usersOnLine.getSelectionModel().getSelectedItem();
+        network.sendMessage(to, message);
         txtMessageInput.clear();
         txtMessageInput.requestFocus();
     }
 
-    private void printMessage(String from, String message) {
-        final String messageFrom = from.equals(network.getLogin()) ? "Вы" : from;
-        areaMessages.appendText(String.format(INCOME_MESSAGE, messageFrom, message));
-    }
 
     public void setAuthorized(boolean authorized) {
         isAuthorized = authorized;
@@ -98,15 +118,30 @@ public class Controller {
     }
 
     private void okBttnCLicked(ActionEvent event) {
+
         try {
             network = new Network("localhost", 7777);
-            network.setIncomeMessageHandler(this::printMessage);
+
+            network.setIncomeMessageHandler(this);
+
             //TODO: проверка на пустые значения
-            setAuthorized(authorize(txtLogin.getText(), txtPassword.getText()));
+            String login = txtLogin.getText();
+            String password = txtPassword.getText();
+
+            setAuthorized(authorize(login, password));
+
+            network.requestOnlineUsersList();
+
+            stage = (Stage) mainLayout.getScene().getWindow();
+            stage.setTitle(stage.getTitle() + " " + login);
+
+            txtMessageInput.requestFocus();
+
         } catch (IOException e) {
             showError("Network ERROR", "No network connection");
         }
         txtPassword.clear();
+
     }
 
     private void cancelBttnClicked(ActionEvent event) {
@@ -118,5 +153,27 @@ public class Controller {
         errorAlert.setContentText(errorMessage);
         errorAlert.setHeaderText(null);
         errorAlert.showAndWait();
+    }
+
+    @Override
+    public void handleMessage(String from, String message) {
+        final String messageFrom = from.equals(network.getLogin()) ? "Вы" : from;
+        Platform.runLater(() -> messages.add(new Message(messageFrom, message)));
+    }
+
+    @Override
+    public void addOnlineUser(String user) {
+        Platform.runLater(() -> users.add(user));
+    }
+
+    @Override
+    public void removeOnlineUser(String user) {
+        Platform.runLater(() -> users.remove(user));
+    }
+
+    @Override
+    public void setOnlineUsersList(List<String> usersList) {
+        if (!usersList.isEmpty())
+            Platform.runLater(() -> users.addAll(usersList));
     }
 }

@@ -15,7 +15,7 @@ public class ChatApp extends Application {
         primaryStage.setTitle("GeekChat");
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(380.0);
-        primaryStage.setMinWidth(380.0);
+        primaryStage.setMinWidth(500.0);
         primaryStage.show();
 
 
