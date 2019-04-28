@@ -50,7 +50,8 @@ public class MessageCell extends ListCell<Message> {
             txtMessage.setText(message.getMessageText());
             messageCellTop.setStyle(String.format("-fx-background-color: %s",
                     message.getUser().equals("Вы") ? "lightgreen" : "lightgray"));
-            labelTimeStamp.setStyle("-fx-padding: 1 0 1 3");
+
+//            labelTimeStamp.setStyle("-fx-padding: 1 0 1 3");
             setGraphic(messageCell);
         } else {
             setGraphic(null);

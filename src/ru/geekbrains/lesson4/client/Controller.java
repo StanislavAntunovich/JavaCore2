@@ -158,7 +158,7 @@ public class Controller implements IncomeMessageHandler {
     @Override
     public void handleMessage(String from, String message) {
         final String messageFrom = from.equals(network.getLogin()) ? "Вы" : from;
-        Platform.runLater(() -> messages.add(new Message(messageFrom, message, false)));
+        Platform.runLater(() -> messages.add(new Message(messageFrom, message)));
     }
 
     @Override
